@@ -7,18 +7,17 @@ app = FastAPI()
 # Enable CORS (optional but useful)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this for production
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Set up logging
+# Basic logging
 logging.basicConfig(level=logging.INFO)
 
 @app.get("/")
 def health_check():
-    logging.info("Health check pinged")
+    logging.info("Health check pinged.")
     return {"status": "ok"}
 
 @app.post("/ussd")
@@ -26,9 +25,9 @@ async def ussd_handler(request: Request):
     data = await request.form()
     session_id = data.get("sessionId")
     phone_number = data.get("phoneNumber")
-    text = data.get("text", "")
+    text = data.get("text")
 
-    logging.info(f"USSD request from {phone_number} | Session: {session_id} | Text: {text}")
+    logging.info(f"USSD request received: {data}")
 
     # Sample USSD logic
     if text == "":
